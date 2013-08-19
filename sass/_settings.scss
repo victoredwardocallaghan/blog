@@ -60,12 +60,18 @@ $default-float: left;
 // Font-smoothing
 
 // $font-smoothing: antialiased;
+$font-smoothing: subpixel-antialiased;
 
 // Text direction settings
 
 // $text-direction: ltr;
 
 // Colors
+// http://www.colourlovers.com/palette/1464688/Intellectual_Owl
+$primary-color: rgb(30,71,110);
+$secondary-color: rgb(140,28,60);
+$tertiary-color: rgb(154,134,121);
+$quaternary-color: rgb(249,247,233);
 
 // $primary-color: #2ba6cb;
 // $secondary-color: #e9e9e9;
@@ -165,13 +171,16 @@ $default-float: left;
 // $header-font-style: normal;
 // $header-font-color: #222;
 // $header-line-height: 1.4;
+$header-line-height: 1.1;
 // $header-top-margin: .2em;
+$header-top-margin: 1em;
 // $header-bottom-margin: .5em;
 // $header-text-rendering: optimizeLegibility;
 
 // Control header font sizes
 
 // $h1-font-size: emCalc(44);
+$h1-font-size: 3.875em;
 // $h2-font-size: emCalc(37);
 // $h3-font-size: emCalc(27);
 // $h4-font-size: emCalc(23);
@@ -189,6 +198,7 @@ $default-float: left;
 // A general <small> styling
 
 // $small-font-size: 60%;
+$small-font-size: 80%;
 // $small-font-color: lighten($header-font-color, 30%);
 
 // Style paragraphs
@@ -197,6 +207,7 @@ $default-float: left;
 // $paragraph-font-weight: normal;
 // $paragraph-font-size: 1em;
 // $paragraph-line-height: 1.6;
+$paragraph-line-height: 1.618;
 // $paragraph-margin-bottom: emCalc(20);
 // $paragraph-aside-font-size: emCalc(14);
 // $paragraph-aside-line-height: 1.35;
@@ -206,14 +217,18 @@ $default-float: left;
 // Style <code> tags
 
 // $code-color: darken($alert-color, 15%);
+$code-color: darken($tertiary-color, 20%);
 // $code-font-family: Consolas, 'Liberation Mono', Courier, monospace;
 // $code-font-weight: bold;
+$code-font-weight: normal;
 
 // Style anchors
 
 // $anchor-text-decoration: none;
 // $anchor-font-color: $primary-color;
 // $anchor-font-color-hover: darken($primary-color, 5%);
+$anchor-font-color: lighten($primary-color, 25%);
+$anchor-font-color-hover: lighten($primary-color, 35%);
 
 // Style the <hr> element
 
@@ -225,6 +240,7 @@ $default-float: left;
 // Style lists
 
 // $list-style-position: outside;
+$list-style-position: inside;
 // $list-side-margin: 0;
 // $list-nested-margin: emCalc(20);
 // $definition-list-header-weight: bold;
@@ -1083,6 +1099,7 @@ $default-float: left;
 // $side-nav-divider-size: 1px;
 // $side-nav-divider-style: solid;
 // $side-nav-divider-color: darken(#fff, 10%);
+$side-nav-divider-color: $secondary-color;
 
 //
 // Sub Nav Variables
