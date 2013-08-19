@@ -1,11 +1,11 @@
---------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 {-# LANGUAGE OverloadedStrings #-}
 import           Data.Monoid (mappend)
 import           Hakyll
 import qualified Text.Pandoc.Options as Pandoc.Options
 
 
---------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 config :: Configuration
 config = defaultConfiguration
         { deployCommand = "rsync -avz -e ssh ./_site/ username:/srv/www/myself" }
@@ -21,7 +21,7 @@ pandocWriterOptions = defaultHakyllWriterOptions
                     }
 
 
---------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 main :: IO ()
 main = hakyllWith config $ do
 
@@ -79,25 +79,23 @@ main = hakyllWith config $ do
         route idRoute
         compile $ do
             let indexCtx = field "posts" ( \_ ->
-                                postList $ fmap (take 3) . recentFirst) `mappend`
-                                constField "title" "Home"              `mappend`
-                                defaultContext
+                                postList $ fmap (take 3) . recentFirst)
 
             getResourceBody
                 >>= applyAsTemplate indexCtx
-                >>= loadAndApplyTemplate "templates/default.html" indexCtx
+                >>= loadAndApplyTemplate "templates/default.html" postCtx
                 >>= relativizeUrls
 
     match "templates/*" $ compile templateCompiler
 
 
---------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 postCtx :: Context String
 postCtx =
     dateField "date" "%B %e, %Y" `mappend`
     defaultContext
 
---------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 postList :: ([Item String] -> Compiler [Item String]) -> Compiler String
 postList sortFilter = do
     posts   <- sortFilter =<< loadAll "posts/*"

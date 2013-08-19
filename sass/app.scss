@@ -54,3 +54,136 @@
 // @import "foundation/components/tooltips";
 // @import "foundation/components/dropdown";
 
+
+// custom typography ----------------------------------------------------
+h1 {
+    word-wrap: break-word;
+}
+p {
+    // max-width: 36em;
+    text-align: justify;
+}
+code {
+    font-size: 90%;
+}
+ul, ol {
+    list-style-type: square;
+}
+cite {
+    display: block;
+    text-align: right;
+}
+.blog-description {
+    font-size: 90%;
+}
+.footnotes {
+    font-size: 90%;
+}
+
+// links in titles
+h1, h2, h3, h4, h5 {
+    a {
+        color: $header-font-color;
+        &:hover,
+        &:focus { color: lighten($header-font-color, 10%); }
+    }
+}
+
+
+// Layout ---------------------------------------------------------------
+.wrapper {
+    @media #{$small} {
+        @include grid-row;
+    }
+}
+nav {
+    @media (max-width: $small-screen) {
+        @include grid-row;
+        margin-bottom: 1em;
+
+        .face {
+            display: none;
+        }
+        .logo {
+            @include grid-column(2);
+        }
+        ul {
+            @include grid-column(10);
+            @include inline-list;
+            li {
+                padding-left: 2em;
+            }
+        }
+    }
+
+    @media #{$small} {
+        @include grid-column(2, $push:10);
+        margin-top: 3em;
+    }
+}
+.logo-img {
+    margin-top: 1em;
+    margin-bottom: 0em;
+}
+.page-title {
+    margin-top: 0em;
+}
+
+.content {
+    @media (max-width: $small-screen) {
+        @include grid-row;
+        @include grid-column(12);
+        padding-top: 0em;
+    }
+
+    @media #{$small} {
+        @include grid-column($columns:9, $pull:2);
+        padding: 1em;
+    }
+}
+
+.footnotes {
+    margin-top: 6em;
+}
+
+figure {
+    text-align: center;
+}
+figcaption {
+    font-style: italic;
+    font-size: 80%;
+    padding-top: 0.75em;
+}
+
+
+// sidebar --------------------------------------------------------------
+.navigation-list {
+    margin-top: 1em;
+    margin-bottom: 2em;
+
+    ul {
+        @include side-nav;
+    }
+}
+.logo-img {
+    width: 100%;
+}
+
+
+// code and syntax highlighting -----------------------------------------
+@import "syntax-highlighting-solarized-light";
+
+pre {
+    margin-bottom: 1em;
+    padding: 1em;
+
+    overflow: auto;
+    // overflow-x: scroll;
+    // white-space: pre-wrap;
+    background-color: rgba(218,218,218, 0.4)
+}
+
+
+.post-title {
+    font-weight: bold;
+}
