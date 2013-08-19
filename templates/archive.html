@@ -1,2 +1,15 @@
-Here you can find all my previous posts:
-$partial("templates/post-list.html")$
+<div class="archive">
+    <header>
+        <h1 class="page-title"><a href="">$title$</a></h1>
+        <div class="post-info">
+            <span class="ancestors">
+              <a href="/">home »</a>
+              <a href="/archive.html">posts »</a>
+            </span>
+        </div>
+    </header>
+
+    <ul>
+      $posts$
+    </ul>
+</div>
