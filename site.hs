@@ -39,15 +39,11 @@ main = hakyllWith config $ do
         route   idRoute
         compile copyFileCompiler
 
-    match "css/*" $ do
-        route   idRoute
-        compile compressCssCompiler
-
---    match (fromList ["about.rst", "contact.markdown"]) $ do
---        route   $ setExtension "html"
---        compile $ pandocCompiler
---            >>= loadAndApplyTemplate "templates/default.html" defaultContext
---            >>= relativizeUrls
+    match "scss/app.scss" $do
+        route   $ gsubRoute "scss/" (const "css/") `composeRoutes` setExtension "css"
+        compile $ getResourceString
+            >>= withItemBody (unixFilter "sass" ["-s", "--scss", "--compass", "--style", "compressed"])
+            >>= return . fmap compressCss
 
     -- compile static pages from cv.md
     match (fromList ["cv.md"]) $ do
