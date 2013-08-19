@@ -129,6 +129,9 @@ nav {
     margin-top: 0em;
 }
 
+//FIXME:
+//@include sticky-footer(12em, ".wrapper", ".push", "footer");
+
 .content {
     @media (max-width: $small-screen) {
         @include grid-row;
@@ -153,6 +156,18 @@ figcaption {
     font-style: italic;
     font-size: 80%;
     padding-top: 0.75em;
+}
+
+
+// footer text ----------------------------------------------------------
+footer {
+    padding-top: 4em;
+
+    p {
+        text-align: center;
+        max-width: none;
+        color: $tertiary-color;
+    }
 }
 
 
