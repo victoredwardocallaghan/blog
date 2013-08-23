@@ -1,0 +1,155 @@
+---
+title: Dnsmasq
+author: Edward O'Callaghan
+description: Personal DNS resolution
+---
+
+Prelude
+-------
+
+Dnsmasq is an excellent lightweight server designed to provide DNS, DHCP and
+TFTP services to a small-scale network.
+
+It can serve the hostnames of local machines which are not in the global DNS.
+The DHCP server integrates with the DNS server and allows machines with
+DHCP-allocated addresses to appear in the DNS with names configured either in
+each host or in a central configuration file. Dnsmasq supports static and
+dynamic DHCP leases and BOOTP for network booting of diskless machines.
+
+
+Introduction
+------------
+
+So whats so interesting about Dnsmasq? Well, it would seem the prevalence of
+surveillance state, censorship and dictatorship is becoming a raising problem.
+In particular regard to weaponing communication technology in the social age of
+instant communication to monitor and shape how people access the worlds
+information. One such issue is censorship of domain names. The reason this is
+possible is become machines are accessed on the internet by their (ip) address.
+However, typically people access machines by (host) name and not by numerical
+addresses. The mechanism for this is called Dynamic Name Service (DNS)
+resolution which "resolves" hostnames to numerical ip addresses in the
+background for you. However, for this to work (originally) you need a
+centralised authority that allocates hostnames and associates them with ip
+addresses. The "allocation" of hostnames is actually a two part process. On one
+side we have the (domain) registrar that you pay to keep the address for you
+and one the other side a DNS server that you associates the records of ip
+addresses to. That is, the DNS server provides the details (ip address) of
+where to find machines (hosts) on the internet given a (host) name. Since the
+registrar is a centralised authority, it can be controlled by bureaucracy and
+thus censored! Even worse, the registrar may at any time, be required by so
+called law to point (your) domain hostname to a new DNS server displaying
+different content then what you intended. Not only this, since the new DNS
+server pointed too is not under your control it would thus be pointing to
+different machines taking your traffic and seeing your users content too. It
+could also modify uses content and forward on to your servers.  I intend to
+show how to configure a user controlled Network Information Center offering a
+democratic, non-national, alternative to the traditional Top-Level Domain
+registries. That is, an alternative to the traditional TLDs are currently
+served by Network Solutions with policies set by ICANN.
+
+
+Namecoin
+--------
+
+Namecoin is a decentralized, open DNS system based on the bitcoin technology.
+The namecoin software free internet users from imperial control of DNS by
+ICANN. It is a distributed, fully decentralized and anonymous way of
+registering domains. Security is deeply integrated in the software to allow
+only the owner of a domain to modify name attributes in the distributed
+database.
+
+Namecoin allows you to :
+
+ * Securely register and transfer arbitrary names, no possible censorship!
+ * Attach values to the names (up to 1023 bytes)
+ * Trade and transact namecoins, the digital currency NMC.
+
+Security is managed through integrated public/private keys stored on your
+computer (backup your wallet.dat file regularly !). All users of the namecoin
+software share a common list of all domain names in the distributed database.
+
+There are plenty of possible use cases. Some examples:
+
+```
+[Name] => [Value]
+DNS: domain_name => domain_zone_configuration
+Identity: user_name => user_public_identity (email, name, gpg key, etc)
+Timestamping: document_hash => document_infos (name, hash, owner, etc)
+```
+
+To register a name, you must own some namecoins (NMC, the internal
+cryptocurrency used by the software).
+
+Namecoins main features are:
+
+ * distributed/decentralized: each user has its own copy of the full database
+ * secure: security (with public/private keys) is deeply integrated in the
+   software to allow only the owner of a name to modify it in the distributed
+   database.
+ * pseudonymous: all transfers of data are public and linked to random
+   generated addresses
+ * open: anybody can use namecoin to register a name or to create its own
+   Namespace
+
+
+Dnsmasq
+-------
+
+Here I show how to configure Dnsmasq to resolve .bit TLD domain names on
+ArchLinux although you can generalise this and it says essentially the same.
+
+
+```
+$ sudo su -
+# mkdir /etc/dnsmasq.d
+# cat  > /etc/dnsmasq.d/01_localhost << EOF
+
+# Every address that ends in ‘.lan’ will belong to your local IP.
+address=/lan/127.0.0.1"
+EOF
+
+# cat /etc/dnsmasq.d/02_dot-bit << EOF
+
+resolv-file=/etc/resolv.conf.standard
+strict-order
+server=/bit/178.32.31.41,/glue/178.32.31.41,/geek/178.32.31.41,/free/178.32.31.41,/indy/178.32.31.41,/parody/178.32.31.41,/bbs/178.32.31.41,/fur/178.32.31.41,/null/178.32.31.41,/oss/178.32.31.41,/ing/178.32.31.41,/dyn/178.32.31.41,/gopher/178.32.31.41,/micro/178.32.31.41
+EOF
+
+```
+
+Now ensure the following line is uncommented:
+
+```
+# grep dnsmasq.d /etc/dnsmasq.conf
+conf-dir=/etc/dnsmasq.d
+```
+
+To stop
+```/etc/resolv.conf```
+from getting overwritten
+make the following change:
+
+```
+# grep resolv.conf /etc/resolvconf.conf
+
+#resolv_conf=/etc/resolv.conf
+resolv_conf=/etc/resolv.conf.standard
+```
+
+Lastly we setup our machine as the primary point of contract to resolve
+hostnames by overwritting resolve.conf as follows:
+
+```
+# echo '127.0.0.1 > /etc/resolv.conf'
+```
+
+Start the system service (on ArchLinux):
+
+```
+# systemctl enable dnsmasq
+# systemctl start dnsmasq
+```
+
+
+TODO: Finish me...
