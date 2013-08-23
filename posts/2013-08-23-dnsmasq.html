@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<!--[if IE 8]>         <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width" />
+  <title>Edward O'Callaghan - Dnsmasq</title>
+  <meta name="description" content="Personal DNS resolution">
+  <link rel="author" href="https://www.alterapraxis.com">
+  <link rel="stylesheet" type="text/css" href="../css/_normalize.css" />
+  <link rel="stylesheet" type="text/css" media="screen, projector, print" href="../css/app.css" />
+</head>
+
+    <body>
+    <div class="wrapper">
+
+      <nav>
+        <a class="face" href="../"><img src="../images/profile.jpg"></a>
+        <div class="navigation-list">
+          <a class="logo" href="../"><img class="logo-img" src="../images/logo.svg" alt="EVO"></a>
+
+          <ul>
+            <li class="divider"></li>
+            <li><a href="../cv.html">curriculum vitae</a></li>
+            <li><a href="https://github.com/victoredwardocallaghan?tab=repositories">projects</a></li>
+            <li><a href="../archive.html">posts</a></li>
+            <li><a href="mailto:mail@alterapraxis.com.au">✉</a></li>
+          </ul>
+        </div>
+      </nav>
+
+      <div class="content"><article class="post">
+    <header>
+        <h1 class="page-title"><a href>Dnsmasq</a></h1>
+        <div class="post-info">
+            <span class="ancestors">
+              <a href="../">home »</a>
+              <a href="../archive.html">posts »</a>
+              <a href>…</a></span>
+            <span class="date">August 23, 2013</span>
+        </div>
+    </header>
+
+    <section id="prelude" class="level2">
+<h2><a href="#prelude">Prelude</a></h2>
+<p>Dnsmasq is an excellent lightweight server designed to provide DNS, DHCP and TFTP services to a small-scale network.</p>
+<p>It can serve the hostnames of local machines which are not in the global DNS. The DHCP server integrates with the DNS server and allows machines with DHCP-allocated addresses to appear in the DNS with names configured either in each host or in a central configuration file. Dnsmasq supports static and dynamic DHCP leases and BOOTP for network booting of diskless machines.</p>
+</section>
+<section id="introduction" class="level2">
+<h2><a href="#introduction">Introduction</a></h2>
+<p>So whats so interesting about Dnsmasq? Well, it would seem the prevalence of surveillance state, censorship and dictatorship is becoming a raising problem. In particular regard to weaponing communication technology in the social age of instant communication to monitor and shape how people access the worlds information. One such issue is censorship of domain names. The reason this is possible is become machines are accessed on the internet by their (ip) address. However, typically people access machines by (host) name and not by numerical addresses. The mechanism for this is called Dynamic Name Service (DNS) resolution which <q>resolves</q> hostnames to numerical ip addresses in the background for you. However, for this to work (originally) you need a centralised authority that allocates hostnames and associates them with ip addresses. The <q>allocation</q> of hostnames is actually a two part process. On one side we have the (domain) registrar that you pay to keep the address for you and one the other side a DNS server that you associates the records of ip addresses to. That is, the DNS server provides the details (ip address) of where to find machines (hosts) on the internet given a (host) name. Since the registrar is a centralised authority, it can be controlled by bureaucracy and thus censored! Even worse, the registrar may at any time, be required by so called law to point (your) domain hostname to a new DNS server displaying different content then what you intended. Not only this, since the new DNS server pointed too is not under your control it would thus be pointing to different machines taking your traffic and seeing your users content too. It could also modify uses content and forward on to your servers. I intend to show how to configure a user controlled Network Information Center offering a democratic, non-national, alternative to the traditional Top-Level Domain registries. That is, an alternative to the traditional TLDs are currently served by Network Solutions with policies set by ICANN.</p>
+</section>
+<section id="namecoin" class="level2">
+<h2><a href="#namecoin">Namecoin</a></h2>
+<p>Namecoin is a decentralized, open DNS system based on the bitcoin technology. The namecoin software free internet users from imperial control of DNS by ICANN. It is a distributed, fully decentralized and anonymous way of registering domains. Security is deeply integrated in the software to allow only the owner of a domain to modify name attributes in the distributed database.</p>
+<p>Namecoin allows you to :</p>
+<ul>
+<li>Securely register and transfer arbitrary names, no possible censorship!</li>
+<li>Attach values to the names (up to 1023 bytes)</li>
+<li>Trade and transact namecoins, the digital currency NMC.</li>
+</ul>
+<p>Security is managed through integrated public/private keys stored on your computer (backup your wallet.dat file regularly !). All users of the namecoin software share a common list of all domain names in the distributed database.</p>
+<p>There are plenty of possible use cases. Some examples:</p>
+<pre><code>[Name] =&gt; [Value]
+DNS: domain_name =&gt; domain_zone_configuration
+Identity: user_name =&gt; user_public_identity (email, name, gpg key, etc)
+Timestamping: document_hash =&gt; document_infos (name, hash, owner, etc)</code></pre>
+<p>To register a name, you must own some namecoins (NMC, the internal cryptocurrency used by the software).</p>
+<p>Namecoins main features are:</p>
+<ul>
+<li>distributed/decentralized: each user has its own copy of the full database</li>
+<li>secure: security (with public/private keys) is deeply integrated in the software to allow only the owner of a name to modify it in the distributed database.</li>
+<li>pseudonymous: all transfers of data are public and linked to random generated addresses</li>
+<li>open: anybody can use namecoin to register a name or to create its own Namespace</li>
+</ul>
+</section>
+<section id="dnsmasq" class="level2">
+<h2><a href="#dnsmasq">Dnsmasq</a></h2>
+<p>Here I show how to configure Dnsmasq to resolve .bit TLD domain names on ArchLinux although you can generalise this and it says essentially the same.</p>
+<pre><code>$ sudo su -
+# mkdir /etc/dnsmasq.d
+# cat  &gt; /etc/dnsmasq.d/01_localhost &lt;&lt; EOF
+
+# Every address that ends in ‘.lan’ will belong to your local IP.
+address=/lan/127.0.0.1&quot;
+EOF
+
+# cat /etc/dnsmasq.d/02_dot-bit &lt;&lt; EOF
+
+resolv-file=/etc/resolv.conf.standard
+strict-order
+server=/bit/178.32.31.41,/glue/178.32.31.41,/geek/178.32.31.41,/free/178.32.31.41,/indy/178.32.31.41,/parody/178.32.31.41,/bbs/178.32.31.41,/fur/178.32.31.41,/null/178.32.31.41,/oss/178.32.31.41,/ing/178.32.31.41,/dyn/178.32.31.41,/gopher/178.32.31.41,/micro/178.32.31.41
+EOF
+</code></pre>
+<p>Now ensure the following line is uncommented:</p>
+<pre><code># grep dnsmasq.d /etc/dnsmasq.conf
+conf-dir=/etc/dnsmasq.d</code></pre>
+<p>To stop <code>/etc/resolv.conf</code> from getting overwritten make the following change:</p>
+<pre><code># grep resolv.conf /etc/resolvconf.conf
+
+#resolv_conf=/etc/resolv.conf
+resolv_conf=/etc/resolv.conf.standard</code></pre>
+<p>Lastly we setup our machine as the primary point of contract to resolve hostnames by overwritting resolve.conf as follows:</p>
+<pre><code># echo '127.0.0.1 &gt; /etc/resolv.conf'</code></pre>
+<p>Start the system service (on ArchLinux):</p>
+<pre><code># systemctl enable dnsmasq
+# systemctl start dnsmasq</code></pre>
+<p>TODO: Finish me…</p>
+</section>
+
+</article>
+</div>
+      <div class="push"></div>
+
+    </div>
+
+
+    <footer>
+      <p>⚒ Built <a href="../humans.txt">by hand</a>
+      ⨘ proudly generated by
+      <a href="http://jaspervdj.be/hakyll">Hakyll</a>.</p>
+    </footer>
+
+    </body>
+</html>
